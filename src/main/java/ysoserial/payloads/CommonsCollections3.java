@@ -27,6 +27,7 @@ import com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;
  * InvokerTransformer.
  */
 @SuppressWarnings({"rawtypes", "unchecked", "restriction"})
+//jdk1.7
 @PayloadTest ( precondition = "isApplicableJavaVersion")
 @Dependencies({"commons-collections:commons-collections:3.1"})
 @Authors({ Authors.FROHOFF })

