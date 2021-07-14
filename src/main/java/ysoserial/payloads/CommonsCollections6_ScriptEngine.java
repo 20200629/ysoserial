@@ -30,7 +30,7 @@ import java.util.Map;
                             org.apache.commons.collections.functors.ChainedTransformer.transform()
                             org.apache.commons.collections.functors.InvokerTransformer.transform()
                             java.lang.reflect.Method.invoke()
-                                java.lang.Runtime.exec()
+                                Engine.eval()
 
     by @matthias_kaiser
 */
